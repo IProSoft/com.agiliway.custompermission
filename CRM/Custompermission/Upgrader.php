@@ -3,7 +3,7 @@
 /**
  * Collection of upgrade steps.
  */
-class CRM_Custompermission_Upgrader extends CRM_Custompermission_Upgrader_Base {
+class CRM_Custompermission_Upgrader extends CRM_Extension_Upgrader_Base {
 
   public function install() {
     $this->executeSqlFile('sql/install.sql');
