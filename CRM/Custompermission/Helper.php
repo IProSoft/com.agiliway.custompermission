@@ -321,7 +321,8 @@ class CRM_Custompermission_Helper {
       'organizations' => [],
       'contacts' => [],
     ];
-    $sql = '
+    if($contactId) {
+      $sql = '
       SELECT
         contact_b.id,
         contact_b.display_name, 
@@ -380,17 +381,17 @@ class CRM_Custompermission_Helper {
       AND relationship.is_active = 1
       AND relationship.case_id IS NULL
     ';
-    $contacts = CRM_Core_DAO::executeQuery($sql, [ 1 => [ $contactId, 'Integer' ]])->fetchAll();
+      $contacts = CRM_Core_DAO::executeQuery($sql, [1 => [$contactId, 'Integer']])->fetchAll();
 
-    foreach ($contacts as $contact) {
-      array_push($childrenOfContact[($contact['contact_type'] == 'Organization') ? 'organizations' : 'contacts'], [
-        'id' => $contact['id'],
-        'display_name' => $contact['display_name'],
-        'amount_child_organizations' => $contact['amount_child_organizations'],
-        'amount_child_contacts' => $contact['amount_child_contacts'],
-      ]);
+      foreach ($contacts as $contact) {
+        array_push($childrenOfContact[($contact['contact_type'] == 'Organization') ? 'organizations' : 'contacts'], [
+          'id' => $contact['id'],
+          'display_name' => $contact['display_name'],
+          'amount_child_organizations' => $contact['amount_child_organizations'],
+          'amount_child_contacts' => $contact['amount_child_contacts'],
+        ]);
+      }
     }
-
     return $childrenOfContact;
   }
 

@@ -39,12 +39,13 @@ function custompermission_civicrm_enable() {
  */
 function custompermission_civicrm_buildForm($formName, &$form) {
   if ($formName == 'CRM_Admin_Form_RelationshipType') {
-    $form->addRadio('is_permission_a_b', ts('Permission for Contact A to Contact B'), CRM_Core_SelectValues::getPermissionedRelationshipOptions(), ['required' => TRUE]);
-    $form->addRadio('is_permission_b_a', ts('Permission for Contact B to Contact A'), CRM_Core_SelectValues::getPermissionedRelationshipOptions(), ['required' => TRUE]);
+    $form->addRadio('is_permission_a_b', ts('Permission for Contact A to Contact B'), array_column(CRM_Core_SelectValues::getPermissionedRelationshipOptions(), 'label', 'id'), ['required' => TRUE]);
+    $form->addRadio('is_permission_b_a', ts('Permission for Contact B to Contact A'), array_column(CRM_Core_SelectValues::getPermissionedRelationshipOptions(), 'label', 'id'), ['required' => TRUE]);
     $params = ['relationship_type_id' => $form->getVar('_id')];
     $defaults = [];
     CRM_Custompermission_BAO_RelationshipTypeSetting::retrieve($params, $defaults);
     $form->setDefaults($defaults);
+    
     CRM_Core_Region::instance('page-body')->add([
       'template' => CRM_Custompermission_ExtensionUtil::path() . '/templates/CRM/Custompermission/Form/Field/RelationshipType.tpl',
     ]);
