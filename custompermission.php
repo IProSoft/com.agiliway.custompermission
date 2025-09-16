@@ -98,7 +98,7 @@ function custompermission_civicrm_postProcess($formName, &$form) {
 }
 
 /**
- * @param array $permission
+ * @param string $permission
  * @param bool $granted
  *
  * @throws \CRM_Core_Exception
@@ -107,27 +107,27 @@ function custompermission_civicrm_permission_check($permission, &$granted) {
   if (!$granted) {
     $cid = CRM_Utils_Request::retrieve('cid', 'Positive');
     if ($cid == CRM_Core_Session::singleton()->get('userID')) {
-      if ($permission == 'view all contacts' && CRM_Utils_System::getUrlPath() == 'civicrm/ajax/contactrelationships') {
+      if ($permission === 'view all contacts' && CRM_Utils_System::currentPath() == 'civicrm/ajax/contactrelationships') {
         $granted = CRM_Core_Permission::check('view_my_relationships');
       }
     }
     else {
-      if ($permission == 'view all contacts') {
+      if ($permission === 'view all contacts') {
         $granted = CRM_Custompermission_RelationshipsChecker::checkContactAccess($cid, CRM_Contact_BAO_Relationship::VIEW);
       }
-      if ($permission == 'edit all contacts') {
+      if ($permission === 'edit all contacts') {
         $granted = CRM_Custompermission_RelationshipsChecker::checkContactAccess($cid, CRM_Contact_BAO_Relationship::EDIT);
       }
-      if ($permission == 'access all cases and activities') {
+      if ($permission === 'access all cases and activities') {
         if (CRM_Custompermission_Helper::accessUserToContact($cid, CRM_Contact_BAO_Relationship::VIEW)) {
           $granted = TRUE;
         }
       }
     }
-    if ($permission == 'view all contacts' && CRM_Core_Permission::check('view all contacts in domain')) {
+    if ($permission === 'view all contacts' && CRM_Core_Permission::check('view all contacts in domain')) {
       $granted = TRUE;
     }
-    elseif ($permission == 'edit all contacts' && CRM_Core_Permission::check('edit all contacts in domain')) {
+    elseif ($permission === 'edit all contacts' && CRM_Core_Permission::check('edit all contacts in domain')) {
       $granted = TRUE;
     }
   }
